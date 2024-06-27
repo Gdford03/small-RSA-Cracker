@@ -31,11 +31,11 @@ class RSA:
 
         def get_p(self):
             p, q = self.factor(self._n)
-            return int(p) if p else None
+            return int(p) 
 
         def get_q(self):
             p, q = self.factor(self._n)
-            return int(q) if q else None
+            return int(q) 
 
         def phi(self):
             p = self.get_p()
