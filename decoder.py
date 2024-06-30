@@ -6,6 +6,7 @@ class RsaDecoder:
         self._p = None
         self._q = None
         self._phi = None
+        self._d = None
 
     def is_prime(self, num):
         if num <= 1:
@@ -58,6 +59,30 @@ class RsaDecoder:
             self.set_phi()
         return self._phi
 
+    def egcd(self, a, b):
+        if a == 0:
+            return b, 0, 1
+        g, x1, y1 = self.egcd(b % a, a)
+        x = y1 - (b // a) * x1
+        y = x1
+        return g, x, y
+
+    def mod_inverse(self, e, phi):
+        g, x, y = self.egcd(e, phi)
+        if g != 1:
+            raise Exception('Modular inverse does not exist')
+        else:
+            return x % phi
+
+    def set_d(self):
+        phi = self.get_phi()
+        self._d = self.mod_inverse(self._e, phi)
+        return self._d
+
+    def get_d(self):
+        if self._d is None:
+            self.set_d()
+        return self._d
 
 # try:
 #     n = input('What is n: ')
@@ -74,5 +99,6 @@ class RsaDecoder:
 # rsa = RsaDecoder(n, e)
 #
 # print(rsa.get_phi())
-
-
+# print(rsa.get_p())
+# print(rsa.get_q())
+# print(rsa.get_d())
